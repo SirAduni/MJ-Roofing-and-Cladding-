@@ -329,21 +329,26 @@ function Contact() {
   );
 }
 
-function QuoteForm() {
-  const [submitted, setSubmitted] = useState(false);
-  const [data, setData] = useState({
-    name: "",
-    phone: "",
-    address: "",
-    service: "Residential Re-Roof",
-    message: "",
-  });
+async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!data.name.trim() || !data.phone.trim()) return;
+  if (!data.name.trim() || !data.phone.trim()) return;
+
+  try {
+    await fetch("https://formspree.io/f/xnjkzvno", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
     setSubmitted(true);
+  } catch (error) {
+    console.error(error);
   }
+}
 
   if (submitted) {
     return (
